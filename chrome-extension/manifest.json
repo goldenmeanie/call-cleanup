@@ -1,0 +1,23 @@
+{
+  "name":"Call Cleanup",
+  "version":"0.1",
+  "description":"Browser extension to clean up the \"how was your call?\" tabs left behind by Zoom and others.",
+  "manifest_version":2,
+  "browser_action": {
+    "default_popup": "popup-ui.html"
+  },
+  "background": {
+    "scripts":["background.js"],
+    "persistent":false
+  },
+  "commands": {
+    "close-tabs": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
+      },
+      "description": "Close tabs"
+    }
+  },
+  "permissions":["tabs"]
+}
