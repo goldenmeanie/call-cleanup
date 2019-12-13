@@ -10,7 +10,7 @@ function urlIsOnBlacklist(url, blacklist) {
     console.error(e);
     return false;
   }
-  if (URLS.includes(parsed.host + parsed.hash)) return true;
+  if (URLS.includes(parsed.host + parsed.pathname + parsed.hash)) return true;
 
   return false;
 }
