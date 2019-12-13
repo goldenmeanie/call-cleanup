@@ -1,4 +1,5 @@
-const URLS = ["zoom.us/postattendee", "example.com/close-me"]
+const URLS = ["zoom.us/postattendee"];
+const DOMAINS = [];
 
 function urlIsOnBlacklist(url, blacklist) {
   let parsed = (url.startsWith("http://") || url.startsWith("https://")) ? url : "https://" + url;
@@ -10,9 +11,11 @@ function urlIsOnBlacklist(url, blacklist) {
     console.error(e);
     return false;
   }
-  if (URLS.includes(parsed.host + parsed.pathname + parsed.hash)) return true;
-
-  return false;
+  if (DOMAINS.includes(parsed.host) ||
+      URLS.includes(parsed.host + parsed.pathname) ||
+      URLS.includes(parsed.host + parsed.pathname + parsed.hash))
+      return true;
+  else return false;
 }
 
 // Auto-close forbidden tabs
