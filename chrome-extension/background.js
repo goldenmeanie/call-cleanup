@@ -1,11 +1,22 @@
 const URLS = ["zoom.us/postattendee", "example.com/close-me"]
 
-function tabIsOnBlacklist(tabId, tab) {
-  if (!tab || !tab.url || !tab.id) return;
-  let url = tab.url.split(/https?:\/\//).join("").split(/#|\?/)[0];
-  if (URLS.includes(url)) chrome.tabs.remove(tabId);
+function urlIsOnBlacklist(url, blacklist) {
+  let parsed = (url.startsWith("http://") || url.startsWith("https://")) ? url : "https://" + url;
+  try {
+    parsed = new URL(parsed);
+  }
+  catch (e) {
+    console.log("Invalid URL!");
+    console.error(e);
+    return false;
+  }
+  if (URLS.includes(parsed.host + parsed.hash)) return true;
+
+  return false;
 }
 
+// Auto-close forbidden tabs
+//
 // chrome.tabs.onUpdated.addListener((tabId, change, tab)=>{
 //
 //   // Prevents finished loading from throwing an error when trying to redelete a deleted tab
@@ -14,21 +25,22 @@ function tabIsOnBlacklist(tabId, tab) {
 //     return;
 //   }
 //
-//   tabIsOnBlacklist(tabId, tab);
+//   if (tabIsOnBlacklist(tab.url)) chrome.tabs.close(tabId);
 // })
 
 function closeBadTabs() {
   chrome.tabs.query({}, (tabs)=>{
-    let targetedTabs = tabs.filter((tab)=>{
-      let url = tab.url.split(/https?:\/\//).join("").split("#")[0];
-      return URLS.includes(url);
-    }).map(tab=>tab.id)
+    let targetedTabs = tabs
+      .filter(tab=>urlIsOnBlacklist(tab.url))
+      .map(tab=>tab.id)
     chrome.tabs.remove(targetedTabs)
   })
 }
 
-chrome.commands.onCommand.addListener(function(command) {
-  if (command === "close-tabs") {
-    closeBadTabs();
-  }
+chrome.runtime.onMessage.addListener((message)=>{
+  if (message.action === "close-tabs") closeBadTabs();
+})
+
+chrome.commands.onCommand.addListener((command)=>{
+  if (command === "close-tabs") closeBadTabs();
 });
