@@ -1,7 +1,33 @@
 body {
-  width: 200px;
-  height: 200px;
+  width: 120px;
+  /* height: 220px; */
+  padding: 5px 8px;
+  box-sizing: border-box;
+  background-color: #eee;
 }
 p {
   font-weight: bold;
+  font-size: 16px;
+  margin: 0px 0px 10px 0px;
+  text-align: center;
+  color: #333;
+}
+#clear {
+  background: linear-gradient(135deg, #999, #777, #555);
+  background-size: 200% 200%;
+  color:#fff;
+  border: none;
+  display: block;
+  margin: 0 auto;
+
+  padding: 10px 15px;
+  border-radius: 10px;
+  outline:none;
+  transition: background-position 0.35s ease;
+  letter-spacing: 0.2px;
+  font-size: 14px;
+  text-align: center;
+}
+#clear:hover {
+  background-position: 50% 50%;
 }
